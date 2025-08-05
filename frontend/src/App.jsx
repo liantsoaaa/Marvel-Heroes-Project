@@ -13,7 +13,7 @@ const App = () => {
     const [characterToDelete, setCharacterToDelete] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState('home'); // 'home', 'add', 'edit'
+    const [currentPage, setCurrentPage] = useState('home');
 
     useEffect(() => {
         fetchCharacters();
