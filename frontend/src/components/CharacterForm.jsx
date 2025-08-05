@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaSave } from 'react-icons/fa';
 
-const CharacterFormPage = ({ character, onSubmit, onBack }) => {
+const CharacterForm = ({ character, onSubmit, onBack }) => {
     const [formData, setFormData] = useState({
         name: '',
         realName: '',
@@ -146,4 +146,4 @@ const CharacterFormPage = ({ character, onSubmit, onBack }) => {
     );
 };
 
-export default CharacterFormPage;
+export default CharacterForm;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlus, FaSadTear, FaUser, FaSync, FaSearch, FaHome } from 'react-icons/fa';
 import CharacterCard from './components/CharacterCard';
-import CharacterFormPage from './components/CharacterFormPage';
+import CharacterForm from './components/CharacterForm.jsx';
 import ConfirmationModal from './components/ConfirmationModal';
 
 const App = () => {
@@ -267,7 +267,7 @@ const App = () => {
     );
 
     const renderFormPage = () => (
-        <CharacterFormPage
+        <CharacterForm
             character={selectedCharacter}
             onSubmit={selectedCharacter ? handleUpdate : handleCreate}
             onBack={() => setCurrentPage('home')}
