@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Bangers&display=swap');
+
+:root {
+  --marvel-red: #ed1d24;
+  --marvel-dark: #151515;
+  --marvel-gray: #2c2c2c;
+  --marvel-light: #f0f0f0;
+  --marvel-gold: #f0c75e;
+  --marvel-blue: #00a6ed;
+
+  font-family: 'Montserrat', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--marvel-light);
+  background: var(--marvel-dark);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+button, input, select {
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.marvel-font {
+  font-family: 'Bangers', cursive;
+  letter-spacing: 2px;
+}
+
+/* Effet de pulsation pour les éléments importants */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Scrollbar stylisée */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--marvel-red);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c81014;
+}
+
+@media (max-width: 640px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .flex-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .flex-wrap > * {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@layer components {
+  .marvel-glow {
+    text-shadow: 0 0 10px rgba(237, 29, 36, 0.7);
+  }
+
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.bg-marvel-gradient {
+  background: linear-gradient(135deg, #ed1d24 0%, #b11313 100%);
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(237, 29, 36, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(237, 29, 36, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(237, 29, 36, 0); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.glass-effect {
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(
+          circle at 50% 50%,
+          rgba(237, 29, 36, 0.3) 0%,
+          rgba(0, 0, 0, 0) 70%
+  );
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.float-effect {
+  animation: float 4s ease-in-out infinite;
+}
+
+.character-card-float {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+.character-card-float:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(237, 29, 36, 0.3);
+}
+
+@keyframes float {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-20px) translateX(10px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+@keyframes float-2 {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-15px) translateX(-15px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+@keyframes float-3 {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(10px) translateX(15px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.marvel-font {
+  font-family: 'Bangers', cursive;
+  letter-spacing: 2px;
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(
+          circle at 50% 50%,
+          rgba(237, 29, 36, 0.3) 0%,
+          rgba(0, 0, 0, 0) 70%
+  );
+}
+
+.glass-effect {
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
