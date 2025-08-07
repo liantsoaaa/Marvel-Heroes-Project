@@ -126,12 +126,12 @@ const App = () => {
     };
 
     const renderHomePage = () => (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 flex flex-col items-center justify-center">
-            <div className="max-w-5xl mx-auto w-full space-y-12">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col items-center justify-center">
+            <div className="max-w-5xl mx-auto w-full space-y-8 sm:space-y-10 md:space-y-12">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-10 pt-10"
+                    className="text-center mb-6 sm:mb-8 md:mb-10 pt-4 sm:pt-6 md:pt-10"
                 >
                     <motion.h1
                         className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent"
@@ -163,14 +163,14 @@ const App = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="max-w-7xl h-24 mx-auto mb-12"
+                    className="max-w-5xl sm:h-24 h-40 mx-auto mb-12 sm:mb-10 md:mb-12"
                 >
-                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-2xl">
-                        <div className="flex flex-col gap-6">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-slate-700/50 p-4 sm:p-6 shadow-2xl">
+                        <div className="flex flex-col gap-4 sm:gap-6">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
                                 <div className="flex items-center justify-center gap-4">
                                     <motion.div
-                                        className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-3 rounded-full flex items-center gap-3 font-bold shadow-lg"
+                                        className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-3 rounded-xl flex items-center gap-3 font-bold shadow-lg"
                                         whileHover={{ scale: 1.05 }}
                                     >
                                         <User size={20} />
@@ -182,14 +182,14 @@ const App = () => {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => window.location.reload()}
-                                    className="flex items-center gap-2 bg-slate-700/70 hover:bg-slate-600 text-white px-6 py-3 rounded-xl transition-colors shadow-lg"
+                                    className="flex items-center gap-2 bg-slate-700/70 hover:bg-slate-600 text-white px-6 py-3 rounded-lg transition-colors shadow-lg"
                                 >
                                     <RefreshCw size={18} />
                                     <span>Actualiser</span>
                                 </motion.button>
                             </div>
 
-                            <div className="flex flex-col lg:flex-row gap-4 items-center justify-center">
+                            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
                                 <div className="relative w-full max-w-md">
                                     <input
                                         type="text"
@@ -221,76 +221,78 @@ const App = () => {
                     </div>
                 </motion.div>
 
-                <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center max-w-5xl mx-auto"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-                    }}
-                >
-                    <AnimatePresence>
-                        {filteredCharacters.length === 0 ? (
-                            <motion.div
-                                className="col-span-full text-center py-20"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                            >
-                                <div className="bg-slate-800/50 rounded-full w-24 h-24 mx-auto flex items-center justify-center mb-6 backdrop-blur-sm">
-                                    <User className="h-12 w-12 text-slate-500" />
-                                </div>
-                                <h3 className="text-3xl font-bold text-white mb-4">
-                                    {searchTerm ? "Aucun héros trouvé" : "Aucun héros"}
-                                </h3>
-                                <p className="text-slate-400 mb-8 text-lg max-w-md mx-auto">
-                                    {searchTerm ? "Essayez une autre recherche ou explorez d'autres héros" : "Commencez par ajouter votre premier super-héros à votre équipe"}
-                                </p>
-                                {!searchTerm && (
-                                    <motion.button
-                                        whileHover={{
-                                            scale: 1.05,
-                                            boxShadow: "0 10px 30px rgba(237, 29, 36, 0.4)"
-                                        }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                            setSelectedCharacter(null);
-                                            setCurrentPage('add');
-                                        }}
-                                        className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 text-white px-8 py-4 rounded-xl font-bold mx-auto transition-all shadow-lg text-lg"
-                                    >
-                                        <Plus size={18} />
-                                        AJOUTER UN HÉROS
-                                    </motion.button>
-                                )}
-                            </motion.div>
-                        ) : (
-                            filteredCharacters.map(character => (
+                <div className="mt-8 sm:mt-10 md:mt-12">
+                    <motion.div
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center max-w-5xl mx-auto px-4"
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                        }}
+                    >
+                        <AnimatePresence>
+                            {filteredCharacters.length === 0 ? (
                                 <motion.div
-                                    key={character.id}
-                                    variants={{
-                                        hidden: { y: 20, opacity: 0, scale: 0.9 },
-                                        visible: { y: 0, opacity: 1, scale: 1 }
-                                    }}
-                                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                                    className="w-full max-w-sm"
+                                    className="col-span-full text-center py-20"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                 >
-                                    <CharacterCard
-                                        character={character}
-                                        onEdit={() => {
-                                            setSelectedCharacter(character);
-                                            setCurrentPage('edit');
-                                        }}
-                                        onDelete={() => {
-                                            setCharacterToDelete(character);
-                                            setShowConfirm(true);
-                                        }}
-                                    />
+                                    <div className="bg-slate-800/50 rounded-full w-24 h-24 mx-auto flex items-center justify-center mb-6 backdrop-blur-sm">
+                                        <User className="h-12 w-12 text-slate-500" />
+                                    </div>
+                                    <h3 className="text-3xl font-bold text-white mb-4">
+                                        {searchTerm ? "Aucun héros trouvé" : "Aucun héros"}
+                                    </h3>
+                                    <p className="text-slate-400 mb-8 text-lg max-w-md mx-auto">
+                                        {searchTerm ? "Essayez une autre recherche ou explorez d'autres héros" : "Commencez par ajouter votre premier super-héros à votre équipe"}
+                                    </p>
+                                    {!searchTerm && (
+                                        <motion.button
+                                            whileHover={{
+                                                scale: 1.05,
+                                                boxShadow: "0 10px 30px rgba(237, 29, 36, 0.4)"
+                                            }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => {
+                                                setSelectedCharacter(null);
+                                                setCurrentPage('add');
+                                            }}
+                                            className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 text-white px-8 py-4 rounded-xl font-bold mx-auto transition-all shadow-lg text-lg"
+                                        >
+                                            <Plus size={18} />
+                                            AJOUTER UN HÉROS
+                                        </motion.button>
+                                    )}
                                 </motion.div>
-                            ))
-                        )}
-                    </AnimatePresence>
-                </motion.div>
+                            ) : (
+                                filteredCharacters.map(character => (
+                                    <motion.div
+                                        key={character.id}
+                                        variants={{
+                                            hidden: { y: 20, opacity: 0, scale: 0.9 },
+                                            visible: { y: 0, opacity: 1, scale: 1 }
+                                        }}
+                                        exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                                        className="w-full max-w-sm"
+                                    >
+                                        <CharacterCard
+                                            character={character}
+                                            onEdit={() => {
+                                                setSelectedCharacter(character);
+                                                setCurrentPage('edit');
+                                            }}
+                                            onDelete={() => {
+                                                setCharacterToDelete(character);
+                                                setShowConfirm(true);
+                                            }}
+                                        />
+                                    </motion.div>
+                                ))
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+                </div>
 
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -300,7 +302,7 @@ const App = () => {
                 >
                     <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto rounded-full mb-4" />
                     <p className="text-slate-500 text-sm">
-                        Powered by Marvel Universe • {new Date().getFullYear()}
+                        Inspired by Marvel Universe • {new Date().getFullYear()}. Created by liantsoaaa
                     </p>
                 </motion.div>
             </div>

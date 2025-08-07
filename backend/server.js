@@ -33,7 +33,6 @@ const readData = async () => {
         return JSON.parse(data);
     } catch (error) {
         if (error.code === 'ENOENT') {
-            // Créer le fichier avec des données par défaut
             const defaultData = { characters: [] };
             await writeData(defaultData);
             return defaultData;
@@ -74,16 +73,23 @@ app.get('/characters/all', async (req, res) => {
 app.post('/characters', async (req, res) => {
     try {
         const data = await readData();
-        const newCharacter = {
-            id: Date.now(),
-            ...req.body
+        const id = parseInt(req.params.id); 
+        const index = data.characters.findIndex(c => c.id === id);
+
+        if (index === -1) {
+            return res.status(404).json({ error: 'Personnage non trouvé' });
+        }
+
+        data.characters[index] = {
+            ...data.characters[index],
+            ...req.body,
+            id: id 
         };
-        data.characters.push(newCharacter);
         await writeData(data);
-        res.status(201).json(newCharacter);
+        res.json(data.characters[index]);
     } catch (error) {
-        console.error("Erreur de création:", error);
-        res.status(500).json({ error: 'Erreur de création' });
+        console.error("Erreur de mise à jour:", error);
+        res.status(500).json({ error: 'Erreur de mise à jour' });
     }
 });
 
@@ -112,7 +118,7 @@ app.put('/characters/:id', async (req, res) => {
 app.delete('/characters/:id', async (req, res) => {
     try {
         const data = await readData();
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id); 
         const index = data.characters.findIndex(c => c.id === id);
 
         if (index === -1) {

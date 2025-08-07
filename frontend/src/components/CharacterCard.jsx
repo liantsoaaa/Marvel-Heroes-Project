@@ -22,7 +22,7 @@ const CharacterCard = ({ character, onEdit, onDelete }) => {
                 scale: 1.02,
                 transition: { type: "spring", stiffness: 300, damping: 25 }
             }}
-            className="group relative w-full max-w-[250px] min-h-[200px] mx-auto my-20 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 rounded-xl overflow-hidden shadow-xl border border-slate-700/50 backdrop-blur-sm"
+            className="group relative w-full min-h-[200px] mx-auto my-4 sm:my-6 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 rounded-xl overflow-hidden shadow-xl border border-slate-700/50 backdrop-blur-sm"
         >
             <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-orange-500/5 to-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
@@ -30,17 +30,17 @@ const CharacterCard = ({ character, onEdit, onDelete }) => {
 
             <div className="absolute top-3 right-3 z-20">
                 <motion.div
-                    className="flex items-center gap-1 bg-gradient-to-r from-red-600/90 to-orange-600/90 backdrop-blur-sm text-white px-3 py-3 rounded-full text-xs font-bold shadow-lg"
+                    className="flex items-center gap-1 bg-gradient-to-r from-red-600/90 to-orange-600/90 backdrop-blur-sm text-white px-2 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold shadow-lg"
                     whileHover={{ scale: 1.1 }}
                 >
-                    <Zap size={12} />
+                    <Zap size={10} className="sm:w-3 sm:h-3" />
                     <span>#{character.id}</span>
                 </motion.div>
             </div>
 
             <div className="absolute top-3 left-3 z-20">
                 <motion.div
-                    className="flex items-center gap-1 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 backdrop-blur-sm border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded-full text-xs font-semibold"
+                    className="flex items-center gap-1 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 backdrop-blur-sm border border-yellow-500/30 text-yellow-400 px-2 py-0.5 rounded-full text-[10px] font-semibold"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3 }}

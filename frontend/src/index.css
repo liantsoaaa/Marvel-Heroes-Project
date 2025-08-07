@@ -2,7 +2,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-/* Variables CSS personnalisées pour les couleurs Marvel */
 @theme {
     --color-marvel-red: #ed1d24;
     --color-marvel-gold: #f0c75e;
@@ -10,18 +9,15 @@
     --color-marvel-dark: #0d0d0d;
     --color-marvel-gray: #1a1a1a;
 
-    /* Couleurs étendues pour un design moderne */
     --color-slate-850: #1e293b;
     --color-slate-750: #334155;
     --color-slate-650: #475569;
 
-    /* Gradients personnalisés */
     --gradient-marvel: linear-gradient(135deg, #ed1d24 0%, #f97316 50%, #eab308 100%);
     --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
 }
 
-/* Reset et base */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -47,14 +43,12 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* Amélioration de la typographie */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.2;
 }
 
-/* Styles pour les inputs et boutons */
 input, select, textarea, button {
     font-family: inherit;
     font-size: inherit;
@@ -64,7 +58,6 @@ input:focus, select:focus, textarea:focus {
     outline: none;
 }
 
-/* Amélioration des focus states */
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
@@ -73,7 +66,6 @@ button:focus-visible {
     outline-offset: 2px;
 }
 
-/* Styles de scrollbar personnalisés */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -98,7 +90,6 @@ button:focus-visible {
     background: #1e293b;
 }
 
-/* Animations personnalisées */
 @keyframes float {
     0%, 100% {
         transform: translateY(0px) rotate(0deg);
@@ -189,7 +180,6 @@ button:focus-visible {
     }
 }
 
-/* Classes utilitaires personnalisées */
 .animate-float {
     animation: float 6s ease-in-out infinite;
 }
@@ -229,7 +219,6 @@ button:focus-visible {
     animation: power-pulse 2s ease-in-out infinite;
 }
 
-/* Effets de glassmorphism améliorés */
 .glass-effect {
     background: rgba(30, 41, 59, 0.4);
     backdrop-filter: blur(20px) saturate(180%);
@@ -250,7 +239,6 @@ button:focus-visible {
             inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Effets de néon Marvel améliorés */
 .neon-red {
     text-shadow:
             0 0 5px #ed1d24,
@@ -269,7 +257,6 @@ button:focus-visible {
             0 0 80px #f0c75e;
 }
 
-/* Gradients personnalisés */
 .bg-gradient-marvel {
     background: var(--gradient-marvel);
 }
@@ -292,7 +279,6 @@ button:focus-visible {
     );
 }
 
-/* Styles pour les boutons hover améliorés */
 .btn-hover-lift {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -321,7 +307,6 @@ button:focus-visible {
             0 0 20px rgba(237, 29, 36, 0.3);
 }
 
-/* Amélioration des interactions pour les cartes */
 .interactive-card {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-style: preserve-3d;
@@ -352,7 +337,6 @@ button:focus-visible {
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Grille centrée parfaite */
 .hero-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -365,7 +349,6 @@ button:focus-visible {
     padding: 0 1rem;
 }
 
-/* Responsive grid améliorée */
 @media (min-width: 640px) {
     .hero-grid {
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -394,7 +377,6 @@ button:focus-visible {
     }
 }
 
-/* États de chargement améliorés */
 .loading-spinner {
     width: 60px;
     height: 60px;
@@ -421,7 +403,6 @@ button:focus-visible {
     }
 }
 
-/* Styles pour les états vides améliorés */
 .empty-state {
     opacity: 0.8;
     filter: grayscale(10%);
@@ -433,7 +414,6 @@ button:focus-visible {
     filter: grayscale(0%);
 }
 
-/* Amélioration des transitions */
 .transition-smooth {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -446,7 +426,6 @@ button:focus-visible {
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Media queries pour la responsivité améliorée */
 @media (max-width: 640px) {
     body {
         font-size: 14px;
@@ -480,14 +459,12 @@ button:focus-visible {
     }
 }
 
-/* Mode sombre optimisé */
 @media (prefers-color-scheme: dark) {
     body {
         color-scheme: dark;
     }
 }
 
-/* Amélioration de l'accessibilité */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -502,7 +479,6 @@ button:focus-visible {
     }
 }
 
-/* Support pour les écrans haute résolution */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .glass-effect {
         backdrop-filter: blur(30px) saturate(200%);
@@ -515,7 +491,6 @@ button:focus-visible {
     }
 }
 
-/* Styles pour les focus states améliorés */
 .focus-ring:focus-visible {
     outline: 3px solid #ed1d24;
     outline-offset: 3px;
@@ -523,7 +498,6 @@ button:focus-visible {
     box-shadow: 0 0 0 6px rgba(237, 29, 36, 0.2);
 }
 
-/* Amélioration des performances d'animation */
 .will-change-transform {
     will-change: transform;
 }
@@ -532,7 +506,6 @@ button:focus-visible {
     will-change: opacity;
 }
 
-/* Styles pour les états actifs */
 .active-state {
     background: rgba(237, 29, 36, 0.15);
     border-color: rgba(237, 29, 36, 0.4);
@@ -540,7 +513,6 @@ button:focus-visible {
     box-shadow: inset 0 0 20px rgba(237, 29, 36, 0.2);
 }
 
-/* Utilitaires pour le texte améliorés */
 .text-gradient-marvel {
     background: linear-gradient(135deg, #ed1d24, #f97316, #eab308);
     -webkit-background-clip: text;
@@ -565,7 +537,6 @@ button:focus-visible {
     opacity: 0.5;
 }
 
-/* Styles pour les icônes améliorés */
 .icon-glow {
     filter: drop-shadow(0 0 12px rgba(237, 29, 36, 0.8));
     transition: filter 0.3s ease;
@@ -575,7 +546,6 @@ button:focus-visible {
     filter: drop-shadow(0 0 20px rgba(237, 29, 36, 1));
 }
 
-/* Container principal amélioré */
 .app-container {
     min-height: 100vh;
     display: flex;
@@ -584,7 +554,6 @@ button:focus-visible {
     overflow-x: hidden;
 }
 
-/* Corrections pour Safari */
 @supports (-webkit-backdrop-filter: blur(20px)) {
     .glass-effect {
         -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -595,7 +564,6 @@ button:focus-visible {
     }
 }
 
-/* Effets de particules */
 .particle {
     position: absolute;
     pointer-events: none;
@@ -623,7 +591,6 @@ button:focus-visible {
     }
 }
 
-/* Effet de hover global */
 .hero-card {
     position: relative;
     overflow: hidden;
@@ -662,7 +629,6 @@ button:focus-visible {
     }
 }
 
-/* Centrage parfait pour tous les contenus */
 .perfect-center {
     display: flex;
     flex-direction: column;
@@ -672,7 +638,6 @@ button:focus-visible {
     min-height: 60vh;
 }
 
-/* Amélioration de l'espacement vertical */
 .section-spacing {
     margin: 3rem 0;
 }
@@ -689,9 +654,6 @@ button:focus-visible {
     }
 }
 
-/* Ajouter à la fin du fichier */
-
-/* Centrage amélioré */
 .perfect-center {
     display: flex;
     flex-direction: column;
@@ -701,7 +663,6 @@ button:focus-visible {
     min-height: 60vh;
 }
 
-/* Espacement vertical amélioré */
 .section-spacing {
     margin: 3rem 0;
 }
@@ -718,7 +679,6 @@ button:focus-visible {
     }
 }
 
-/* Ajustements responsive */
 @media (max-width: 640px) {
     .hero-grid {
         gap: 1.5rem !important;
@@ -726,5 +686,22 @@ button:focus-visible {
 
     .character-card {
         min-height: 380px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .character-card {
+        min-height: 340px !important;
+        max-width: 280px !important;
+    }
+    
+    .hero-grid {
+        gap: 1rem !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .character-card {
+        max-width: 260px !important;
     }
 }
