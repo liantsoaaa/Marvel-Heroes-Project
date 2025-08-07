@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus, FaSadTear, FaUser, FaSync, FaSearch, FaHome } from 'react-icons/fa';
-import CharacterCard from './components/CharacterCard';
-import CharacterForm from './components/CharacterForm.jsx';
-import ConfirmationModal from './components/ConfirmationModal';
+import {
+    Plus,
+    Search,
+    RefreshCw,
+    User
+} from 'lucide-react';
+
+import CharacterCard from "./components/CharacterCard.jsx";
+import CharacterForm from "./components/CharacterForm.jsx";
+import ConfirmationModal from "./components/ConfirmationModal.jsx";
 
 const App = () => {
     const [characters, setCharacters] = useState([]);
@@ -14,10 +20,28 @@ const App = () => {
     const [showConfirm, setShowConfirm] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState('home');
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchCharacters();
     }, []);
+
+    const fetchCharacters = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await fetch('http://localhost:5000/characters');
+            if (!response.ok) throw new Error('Erreur réseau');
+            const data = await response.json();
+            setCharacters(data);
+            setFilteredCharacters(data);
+        } catch (error) {
+            console.error("Erreur de chargement:", error);
+            setError('Impossible de charger les personnages');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         const filtered = characters.filter(character =>
@@ -27,214 +51,229 @@ const App = () => {
         setFilteredCharacters(filtered);
     }, [searchTerm, characters]);
 
-    const fetchCharacters = async () => {
+    const handleCreate = async (character) => {
         setIsLoading(true);
+        setError(null);
         try {
-            const response = await fetch('http://localhost:5000/characters');
-            const data = await response.json();
-            setCharacters(data);
-            setFilteredCharacters(data);
+            const response = await fetch('http://localhost:5000/characters', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(character),
+            });
+
+            if (!response.ok) throw new Error('Erreur création');
+
+            const newCharacter = await response.json();
+            setCharacters(prev => [...prev, newCharacter]);
+            setCurrentPage('home');
         } catch (error) {
-            console.error("Erreur de chargement des personnages:", error);
+            console.error("Erreur de création:", error);
+            setError('Erreur lors de la création');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleCreate = async (character) => {
-        try {
-            await fetch('http://localhost:5000/characters', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(character)
-            });
-            fetchCharacters();
-            setCurrentPage('home');
-        } catch (error) {
-            console.error("Erreur de création:", error);
-        }
-    };
-
     const handleUpdate = async (character) => {
+        setIsLoading(true);
+        setError(null);
         try {
-            await fetch(`http://localhost:5000/characters/${selectedCharacter.id}`, {
+            const response = await fetch(`http://localhost:5000/characters/${selectedCharacter.id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(character)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(character),
             });
-            fetchCharacters();
+
+            if (!response.ok) throw new Error('Erreur mise à jour');
+
+            const updatedCharacter = await response.json();
+            setCharacters(prev =>
+                prev.map(c => c.id === updatedCharacter.id ? updatedCharacter : c)
+            );
             setCurrentPage('home');
         } catch (error) {
             console.error("Erreur de mise à jour:", error);
+            setError('Erreur lors de la mise à jour');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const confirmDelete = async () => {
+        if (!characterToDelete) return;
+
+        setIsLoading(true);
+        setError(null);
         try {
-            await fetch(`http://localhost:5000/characters/${characterToDelete.id}`, {
-                method: 'DELETE'
+            const response = await fetch(`http://localhost:5000/characters/${characterToDelete.id}`, {
+                method: 'DELETE',
             });
-            fetchCharacters();
+
+            if (!response.ok) throw new Error('Erreur suppression');
+
+            setCharacters(prev => prev.filter(c => c.id !== characterToDelete.id));
             setShowConfirm(false);
         } catch (error) {
             console.error("Erreur de suppression:", error);
+            setError('Erreur lors de la suppression');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const renderHomePage = () => (
-        <div className="min-h-screen py-8 px-4 sm:px-6 bg-gradient-to-br from-gray-900 to-black">
-            <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-600 rounded-full mix-blend-soft-light filter blur-[100px] opacity-10 animate-float"></div>
-                <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-blue-600 rounded-full mix-blend-soft-light filter blur-[80px] opacity-10 animate-float animation-delay-2000"></div>
-                <div className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-amber-600 rounded-full mix-blend-soft-light filter blur-[90px] opacity-10 animate-float animation-delay-4000"></div>
-            </div>
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="max-w-7xl mx-auto"
-            >
-
-                <header className="text-center mb-12 relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-red-600 rounded-full mix-blend-soft-light filter blur-3xl opacity-20"></div>
-
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 flex flex-col items-center justify-center">
+            <div className="max-w-5xl mx-auto w-full space-y-12">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center mb-10 pt-10"
+                >
                     <motion.h1
-                        className="text-4xl md:text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500 marvel-font"
-                        initial={{ scale: 0.9 }}
+                        className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent"
+                        initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
-                        transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 15
-                        }}
+                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
                     >
-                        MARVEL CHARACTERS
+                        MARVEL HEROES
                     </motion.h1>
-                    <p className="text-gray-300 max-w-2xl mx-auto text-lg mb-6">
-                        Gérer votre équipe de super-héros préférés
-                    </p>
 
-                    <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-yellow-500 mx-auto rounded-full"></div>
-                </header>
-
-                <div className="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-800/30 backdrop-blur-sm p-5 rounded-2xl border border-gray-700">
-                    <div className="flex flex-col items-center md:items-start">
-                        <div className="bg-gradient-to-r from-red-600 to-red-800 text-white px-5 py-2.5 rounded-full flex items-center gap-2 text-sm font-medium mb-2">
-                            <FaUser /> {characters.length} personnages
-                        </div>
-                        <p className="text-gray-300 text-sm text-center md:text-left">
-                            {characters.length > 0
-                                ? "Cliquez sur un héros pour le modifier"
-                                : "Commencez par ajouter votre premier héros"}
-                        </p>
-                    </div>
-
-                    <div className="w-full md:w-auto flex flex-col sm:flex-row gap-4">
-                        <div className="relative w-full max-w-md">
-                            <input
-                                type="text"
-                                placeholder="Rechercher un héros..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-gray-700/80 border-2 border-gray-600 text-white rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-red-500 backdrop-blur-sm transition-all"
-                            />
-                            <div className="absolute left-4 top-3.5 text-gray-400">
-                                <FaSearch className="text-lg" />
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4 justify-center">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={fetchCharacters}
-                                className="flex items-center justify-center gap-2 bg-gray-700/80 hover:bg-gray-600 text-white py-3.5 px-6 rounded-xl shadow transition-all backdrop-blur-sm border-2 border-gray-600"
-                                disabled={isLoading}
-                            >
-                                <FaSync className={`text-lg ${isLoading ? "animate-spin" : ""}`} />
-                                <span className="hidden sm:inline">Actualiser</span>
-                            </motion.button>
-
-                            <motion.button
-                                whileHover={{
-                                    scale: 1.05,
-                                    boxShadow: '0 0 25px rgba(237, 29, 36, 0.4)'
-                                }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => {
-                                    setSelectedCharacter(null);
-                                    setCurrentPage('add');
-                                }}
-                                className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white py-3.5 px-6 rounded-xl shadow-lg transition-all font-bold"
-                            >
-                                <FaPlus className="text-lg" />
-                                <span>AJOUTER</span>
-                            </motion.button>
-                        </div>
-                    </div>
-                </div>
-
-                {isLoading ? (
-                    <div className="text-center py-20">
-                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-6"></div>
-                        <p className="text-gray-400">Chargement des héros...</p>
-                    </div>
-                ) : filteredCharacters.length === 0 ? (
-                    <motion.div
-                        className="text-center py-20"
+                    <motion.p
+                        className="text-lg text-slate-300 mb-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
                     >
-                        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-full w-24 h-24 mx-auto flex items-center justify-center mb-6 p-4">
-                            <FaSadTear className="h-16 w-16 text-red-500/50" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 text-white">
-                            {searchTerm ? "Aucun résultat trouvé" : "Aucun héros trouvé"}
-                        </h3>
-                        <p className="text-gray-400 mb-6">
-                            {searchTerm
-                                ? "Essayez une autre recherche"
-                                : "Commencez par ajouter votre premier héros Marvel"}
-                        </p>
-                        <motion.button
-                            whileHover={{
-                                scale: 1.05,
-                                boxShadow: '0 0 20px rgba(237, 29, 36, 0.5)'
-                            }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => {
-                                setSelectedCharacter(null);
-                                setCurrentPage('add');
-                            }}
-                            className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white py-3 px-6 rounded-xl shadow-lg transition-all font-bold"
-                        >
-                            <FaPlus className="text-lg" /> AJOUTER UN HÉROS
-                        </motion.button>
-                    </motion.div>
-                ) : (
+                        Gérez votre équipe de super-héros
+                    </motion.p>
+
                     <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"
-                        initial="hidden"
-                        animate="visible"
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                                opacity: 1,
-                                transition: {
-                                    staggerChildren: 0.1
-                                }
-                            }
-                        }}
-                    >
-                        <AnimatePresence>
-                            {filteredCharacters.map(character => (
+                        className="w-20 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto rounded-full"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                    />
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="max-w-7xl h-24 mx-auto mb-12"
+                >
+                    <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-2xl">
+                        <div className="flex flex-col gap-6">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center justify-center gap-4">
+                                    <motion.div
+                                        className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-3 rounded-full flex items-center gap-3 font-bold shadow-lg"
+                                        whileHover={{ scale: 1.05 }}
+                                    >
+                                        <User size={20} />
+                                        <span className="text-lg">{characters.length} héros</span>
+                                    </motion.div>
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => window.location.reload()}
+                                    className="flex items-center gap-2 bg-slate-700/70 hover:bg-slate-600 text-white px-6 py-3 rounded-xl transition-colors shadow-lg"
+                                >
+                                    <RefreshCw size={18} />
+                                    <span>Actualiser</span>
+                                </motion.button>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row gap-4 items-center justify-center">
+                                <div className="relative w-full max-w-md">
+                                    <input
+                                        type="text"
+                                        placeholder="Rechercher un héros..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="w-full bg-slate-700/70 text-white px-6 py-4 pl-14 rounded-xl border border-slate-600/50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all shadow-lg text-center text-lg placeholder-slate-400"
+                                    />
+                                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
+                                </div>
+
+                                <motion.button
+                                    whileHover={{
+                                        scale: 1.05,
+                                        boxShadow: "0 10px 30px rgba(237, 29, 36, 0.4)"
+                                    }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => {
+                                        setSelectedCharacter(null);
+                                        setCurrentPage('add');
+                                    }}
+                                    className="flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg text-lg min-w-[160px]"
+                                >
+                                    <Plus size={20} />
+                                    <span>AJOUTER</span>
+                                </motion.button>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center max-w-5xl mx-auto"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                    }}
+                >
+                    <AnimatePresence>
+                        {filteredCharacters.length === 0 ? (
+                            <motion.div
+                                className="col-span-full text-center py-20"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <div className="bg-slate-800/50 rounded-full w-24 h-24 mx-auto flex items-center justify-center mb-6 backdrop-blur-sm">
+                                    <User className="h-12 w-12 text-slate-500" />
+                                </div>
+                                <h3 className="text-3xl font-bold text-white mb-4">
+                                    {searchTerm ? "Aucun héros trouvé" : "Aucun héros"}
+                                </h3>
+                                <p className="text-slate-400 mb-8 text-lg max-w-md mx-auto">
+                                    {searchTerm ? "Essayez une autre recherche ou explorez d'autres héros" : "Commencez par ajouter votre premier super-héros à votre équipe"}
+                                </p>
+                                {!searchTerm && (
+                                    <motion.button
+                                        whileHover={{
+                                            scale: 1.05,
+                                            boxShadow: "0 10px 30px rgba(237, 29, 36, 0.4)"
+                                        }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => {
+                                            setSelectedCharacter(null);
+                                            setCurrentPage('add');
+                                        }}
+                                        className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 text-white px-8 py-4 rounded-xl font-bold mx-auto transition-all shadow-lg text-lg"
+                                    >
+                                        <Plus size={18} />
+                                        AJOUTER UN HÉROS
+                                    </motion.button>
+                                )}
+                            </motion.div>
+                        ) : (
+                            filteredCharacters.map(character => (
                                 <motion.div
                                     key={character.id}
                                     variants={{
-                                        hidden: { y: 20, opacity: 0 },
-                                        visible: { y: 0, opacity: 1 }
+                                        hidden: { y: 20, opacity: 0, scale: 0.9 },
+                                        visible: { y: 0, opacity: 1, scale: 1 }
                                     }}
-                                    className="flex justify-center"
+                                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                                    className="w-full max-w-sm"
                                 >
                                     <CharacterCard
                                         character={character}
@@ -248,37 +287,47 @@ const App = () => {
                                         }}
                                     />
                                 </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </motion.div>
-                )}
+                            ))
+                        )}
+                    </AnimatePresence>
+                </motion.div>
 
-                <AnimatePresence>
-                    {showConfirm && (
-                        <ConfirmationModal
-                            character={characterToDelete}
-                            onClose={() => setShowConfirm(false)}
-                            onConfirm={confirmDelete}
-                        />
-                    )}
-                </AnimatePresence>
-            </motion.div>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                    className="text-center mt-16 pb-8"
+                >
+                    <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto rounded-full mb-4" />
+                    <p className="text-slate-500 text-sm">
+                        Powered by Marvel Universe • {new Date().getFullYear()}
+                    </p>
+                </motion.div>
+            </div>
         </div>
     );
 
-    const renderFormPage = () => (
-        <CharacterForm
-            character={selectedCharacter}
-            onSubmit={selectedCharacter ? handleUpdate : handleCreate}
-            onBack={() => setCurrentPage('home')}
-        />
-    );
-
     return (
-        <>
+        <div className="app-container">
             {currentPage === 'home' && renderHomePage()}
-            {(currentPage === 'add' || currentPage === 'edit') && renderFormPage()}
-        </>
+            {(currentPage === 'add' || currentPage === 'edit') && (
+                <CharacterForm
+                    character={selectedCharacter}
+                    onSubmit={selectedCharacter ? handleUpdate : handleCreate}
+                    onBack={() => setCurrentPage('home')}
+                />
+            )}
+
+            <AnimatePresence>
+                {showConfirm && (
+                    <ConfirmationModal
+                        character={characterToDelete}
+                        onClose={() => setShowConfirm(false)}
+                        onConfirm={confirmDelete}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
     );
 };
 
