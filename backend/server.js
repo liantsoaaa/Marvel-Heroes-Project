@@ -73,10 +73,17 @@ app.get('/characters/all', async (req, res) => {
 app.post('/characters', async (req, res) => {
     try {
         const data = await readData();
+
+        const lastId = data.characters.length > 0
+            ? Math.max(...data.characters.map(c => c.id))
+            : 0;
+        const newId = lastId + 1;
+
         const newCharacter = {
-            id: Date.now(),
+            id: newId,
             ...req.body
         };
+
         data.characters.push(newCharacter);
         await writeData(data);
         res.status(201).json(newCharacter);
